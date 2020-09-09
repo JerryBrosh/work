@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>vue的第一天</title>
+		<style type="text/css">
+			li{
+				list-style:none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 搜索 -->
+			<input type="text" v-model="search" placeholder="cardId" />
+			<!-- 数据列表 -->
+			<ul>
+				<li v-for='item in getList' :key='item.id'>
+					{{item.id}}--{{item.cardId}}--{{item.pwd}}--{{item.money}}--
+					<button @click="del(item.id)">删除</button>
+				</li>
+			</ul>
+			<!-- 添加 -->
+			<input type="text" v-model="addForm.id" placeholder='id'><br>
+			<input type="text" v-model="addForm.cardId" placeholder='cardId'><br>
+			<input type="text" v-model="addForm.pwd" placeholder='pwd'><br>
+			<input type="text" v-model="addForm.money" placeholder='money'><br>
+			<button type="button" @click="add()">添加</button>
+			
+		</div>
+		
+		<script  src="vue.js"></script>
+		<script type="text/javascript">
+			
+			var vm =new Vue({
+				el:'#app',
+				data:{
+					search:'',
+					list:[
+						{id:1,cardId:'123456789',pwd:'111111',money:2000},
+						{id:2,cardId:'123451234',pwd:'222222',money:4000},
+						{id:3,cardId:'123456951',pwd:'333333',money:6000},
+						{id:4,cardId:'123457536',pwd:'444444',money:2765},
+						{id:5,cardId:'123450025',pwd:'555555',money:2555},
+						{id:6,cardId:'123454569',pwd:'666666',money:1345},
+						{id:7,cardId:'123456789',pwd:'777777',money:1235}
+					],
+					//添加数据功能
+					addForm:{
+						id:'',
+						cardId:'',
+						pwd:'',
+						money:''
+					}
+				},
+				computed:{
+					getList:function(){
+						//-----遍历数据 优化版（箭头函数，ES6）
+						return this.list.filter((item)=>{
+							return item.cardId.indexOf(this.search)>=0;
+						})
+						
+						
+						//------遍历数据方法2：
+						//注意：filter会返回一个数组（ES6）
+						// var that =this;
+						// return this.list.filter(function(item){
+						// 	return item.cardId.indexOf(that.search)>=0;
+						// })
+						
+						//------遍历数据方法1：不建议
+						//特别提示：这里面要用this指定
+						// var arr=[];
+						// for(var i=0; i<this.list.length;i++){
+						// 	if(this.list[i].cardId.indexOf(this.search)>=0){
+						// 		arr.push(this.list[i]);
+						// 	}
+						// }
+						// return arr;
+					}
+				},
+				methods:{
+					//删除数据功能
+					del:function(id){
+						for(var i=0;i<this.list.length;i++){
+							if(this.list[i].id==id){
+								this.list.splice(i,1);
+								break;
+							}
+						}
+					},
+					//添加数据功能
+					add:function(){
+						
+						//...将当前的this.addForm中的内容分解成单个的键值对
+						var obj={...this.addForm};
+						this.list.push(obj);
+						
+						//添加之后清空输入框数值
+						this.addForm.id='';
+						this.addForm.cardId='';
+						this.addForm.pwd='';
+						this.addForm.money='';
+					}
+				}
+			})
+		
+		</script>
+	</body>
+</html>
