@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="search" placeholder="id">
+        <table>
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>班级</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in searchlist" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.sex}}</td>
+                    <td>{{item.calss}}</td>
+                    <td><button @click="del(item.id)">删除</button><button @click="edit(item.id)">修改</button></td>
+                </tr>
+               
+            </tbody>
+        </table>
+        <div>
+            <input type="text" v-model="addlist.id" placeholder="id">
+            <input type="text" v-model="addlist.name" placeholder="name">
+            <input type="text" v-model="addlist.sex" placeholder="sex">
+            <input type="text" v-model="addlist.calss" placeholder="calss">
+            <button @click="add">添加</button>
+        </div>
+        <div v-show="tab">
+            <input type="text"  v-model="selectList.id">
+            <input type="text"  v-model="selectList.name">
+            <input type="text" v-model="selectList.sex">
+            <input type="text"  v-model="selectList.calss">
+            <button @click="save(selectList.id)">保存</button>
+        </div>
+    </div>
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data() {
+                return {
+                    search:'',
+                    tab:false,
+                    msg:'hello world',
+                    userlist:[
+                        {id:'1',name:'yy',sex:'女',calss:1},
+                        {id:'2',name:'xx',sex:'男',calss:3},
+                        {id:'3',name:'mm',sex:'女',calss:5},
+                        {id:'4',name:'hh',sex:'男',calss:2},
+                        {id:'5',name:'qq',sex:'女',calss:1}
+                    ],
+                    addlist:{
+                        id:'',
+                        name:'',
+                        sex:'',
+                        calss:''
+                    },
+                    selectList:[],
+                    select:''
+                }
+            },
+            computed: {
+                searchlist(){
+
+                    return this.userlist.filter(item=>item.id.indexOf(this.search)>=0)
+                    // var arr =[]
+                    // for(var i=0;i<this.userlist.length;i++){
+                       
+                    //     if(this.userlist[i].id.indexOf(this.search)>=0){
+                    //         arr.push(this.userlist[i])
+                    //     }
+                    // }
+                    // return arr
+                }
+            },
+            methods: {
+                add(){
+                    // var obj = this.addlist
+                    var obj = {...this.addlist}
+                    this.userlist.push(JSON.parse(JSON.stringify(obj)))
+                    this.addlist.id=''
+                    this.addlist.name=''
+                    this.addlist.sex=''
+                    this.addlist.calss=''
+                },
+                del(id){
+                    for(var i=0;i<this.userlist.length;i++){
+                        if(id==this.userlist[i].id){
+                            this.userlist.splice(i,1)
+                        }
+                    }
+                },
+                edit(id){
+                    for(var i=0;i<this.userlist.length;i++){
+                        if(id==this.userlist[i].id){
+                            //赋值操作是相当于浅拷贝，知识把此时的地址送给了当前的变量 而不是整个数据  改为深拷贝 -----bug现象就是修改数据时候页面进行同步修改
+                            // this.selectList=this.userlist[i]
+                            this.selectList=JSON.parse(JSON.stringify(this.userlist[i]))
+                            this.select = i
+                        }
+                    }
+                    this.tab=true
+                },
+                save(id){
+                    
+                    this.tab=false
+                    //根据传过来的id也可以这样去渲染数据中找到对应的值在替换掉对应的值--------这个好像不能修改之后数据里面是改了但是页面上没有更新
+                    // for(var i=0;i<this.userlist.length;i++){
+                    //     if(id==this.userlist[i].id){
+                           
+                    //         // this.userlist[i]=JSON.parse(JSON.stringify(this.selectList))
+                    //         this.userlist[i] = this.selectList
+                    //         console.log(this.userlist[i]);
+                    //     }
+                    // }
+                    /*这个方法就是不需要根据传过来的id  从编辑那里把位置保留出来，通过Vue.set方法实现修改*/
+                    //第一个参数是渲染的数据   第二个是修改的位置    第三个是修改后的数据
+                    Vue.set(this.userlist, this.select, this.selectList);
+                }
+            },
+        })
+    </script>
+</body>
+</html>
