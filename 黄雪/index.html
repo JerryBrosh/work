@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id='app'>
+        <input type="text" v-model='search' placeholder="卡号">
+        <ul>
+            <li v-for='item in searchList' :key='item.id'>
+                {{item.id}}--{{item.cardId}}--{{item.pwd}}--{{item.money}} <button @click='del(item.id)'>删除</button>
+            </li>
+        </ul>
+        <input type="text" v-model='addForm.id' placeholder="id"><br/>
+        <input type="text" v-model='addForm.cardId' placeholder="cardId"><br/>
+        <input type="text" v-model='addForm.pwd' placeholder="pwd"><br/>
+        <input type="text" v-model='addForm.money' placeholder="money"><br/>
+        <button @click='add(list)'>添加</button>
+        </div>
+    </div>
+    <script src='vue.js'></script>
+    <script type='text/javascript'>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                tab:false,
+                search:'',
+                list:[
+                        {id: 1, cardId: "6225880287860549", pwd: "909090", money: 9000},
+                        {id: 2, cardId: "6225880287862345", pwd: "666666", money: 100},
+                        {id: 3, cardId: "6225880287861234", pwd: "888888", money: 5000},
+                        {id: 4, cardId: "6225880287860549", pwd: "909090", money: 9000},
+                        {id: 5, cardId: "6225880287862345", pwd: "666666", money: 100},
+                        {id: 6, cardId: "6225880287861234", pwd: "888888", money: 5000},
+                        {id: 7, cardId: "6225880287860549", pwd: "909090", money: 9000},
+                        {id: 8, cardId: "6225880287862345", pwd: "666666", money: 100},
+                        {id: 9, cardId: "6225880287861234", pwd: "888888", money: 5000}
+                    ],
+                addForm:{
+                    id:'',
+                    cardId:'',
+                    pwd:'',
+                    money:''
+                },
+                updataForm:[]
+            },
+            computed:{
+                searchList:function(){
+                    //箭头函数
+                    return this.list.filter((item)=>{
+                        return item.cardId.indexOf(this.search)>=0
+                    });
+                    //方法二 filter 筛选
+                    // var that=this;
+                    // return this.list.filter(function(item){
+                    //     return item.cardId.indexOf(that.search)>=0
+                    // })
+                    //方法一 遍历循环基础版
+                    // var arr=[];
+                    // for(var i=0;i<this.list.length;i++){
+                    //     if(this.list[i].cardId.indexOf(this.search)>=0){
+                    //         arr.push(this.list[i]);
+                    //     }
+                    // }
+                    // return arr;
+                }
+            },
+            methods:{
+                del:function(id){
+                    for(var i=0;i<this.list.length;i++){
+                        if(this.list[i].id==id){
+                            this.list.splice(i,1);
+                            break;
+                        }
+                    }
+                },
+                add:function(){
+                    var obj={...this.addForm};
+                    this.list.push(obj);
+                    this.addForm.id=" ";
+                    this.addForm.cardId=" ";
+                    this.addForm.pwd=" ";
+                    this.addForm.money=" ";
+                },
+            }
+        })
+    </script>
+</body>
+</html>
