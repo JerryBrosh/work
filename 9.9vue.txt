@@ -1,0 +1,96 @@
+
+前端三大框架（虚拟Dom）
+vue   ，react ，angular
+
+
+vue
+定义：用于构建用户界面的渐进式（增量）JavaScript 框架
+
+vue技术栈（全家桶、生态系统）：vue+vuex+vue-roter+axios
+
+优点:
+1、分离前后端关注点，前端负责界面显示，后端负责数据存储和计算，各司其职，不会把前后端的逻辑混杂
+在一起;
+2、减轻服务器压力，服务器只用出数据就可以，不用管展示逻辑和页面合成，吞吐能力会提高几倍;
+3、同—套后端程序代码，不用修改就可以用于Web界面、手机、平板等多种客户端;
+缺点:
+1.SEO问题，现在可以通过Prerender等技术解决一部分;
+2、前进、后退、地址栏等，需要程序进行管理;
+
+作者：尤雨溪
+
+SPA尤一个很大的问题，就是会频繁操作dom，mvvm模式来解决这个问题
+
+渲染方法:虚拟dom，更好的解决dom性能问题
+
+angular 2.0以后＋ typescript(趋势):
+typescript :面向对象
+vue 1.0=> vue 2.0 => vue 3.0（typescript）
+typescript :后面介绍
+
+1.1MVVM模式
+模式：MVC：M：模式（数据） V视图（页面展示） C控制（逻辑）
+MVVM模式=》主要针对视图层的一个模式
+M:数据v:视图VM: view-model交互
+使用MVVM模式，数据双向绑定(VM)
+面试题:如何实现数据的双向绑定(Object.defineProperty)
+
+
+1.2
+<div id="app"></div>
+var vm= new Vue ( {
+el: "#app",
+data: {
+message : "hello message"
+})
+注:vue2.x 中el不能挂载在<html> 与body上
+vm.message或者vm.$data.message获取对应data上的数据
+vmg$el，对应el指向的DOM节点
+
+2. vue的api
+全局属性，全局方法
+vue.Filter ()
+
+实例属性，实例方法
+vm.$el
+vm.sdata
+vm.$set ()方法（重点)
+vm.$ref
+vm.$nextTick()
+vm.$watch ()
+vm. $mount()|
+
+
+3．指令
+v-text
+v-html
+v-show :值为true进行显示，值为false也会渲染Dom节点，但是使用样式对其隐藏
+v-if:值为true进行显示，值为false,直接不渲染此节点
+
+（面i试是题）v-show 与v-if的区别及应用场景
+v-else
+v-else-if
+v-for
+注:使用v-for，要绑定key，使它唯—
+v-bind: key简写:key ;
+<img v-bind:src=""/>
+data: {
+imgSrc : "image/bg.jpg"
+}
+v-bind:
+v-model
+
+
+4. v-on :绑定事件
+<div @click="eventHandle"></ div>
+
+简称:@
+.stop -调用_event.stopPropagation ( ) 
+.prevent -调用event.preventDefault ()。
+.capture -添加事件侦听器时使用capture模式。
+.self -只当事件是从侦听器绑定的元素本身触发时才触发回调。
+.{keyCode | keyAlias} -只当事件是从特定键触发时才触发回调。
+.native -监听组件根元素的原生事件。
+.once -只触发一次回调。
+
+
