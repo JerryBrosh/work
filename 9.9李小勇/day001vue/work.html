@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model='search' placeholder="卡号">
+        <ul>
+            <li v-for='item in searchlist' :key='item.id'>{{item.id}}--{{item.cardId}}--{{item.pwd}}--{{item.money}}--
+                <button @click='del(item.id)'>删除</button>--<button @click=''>修改</button>
+            </li>
+        </ul>
+        <input type=" text" v-model='addFrom.id' placeholder="id"><br>
+        <input type=" text" v-model='addFrom.cardId' placeholder="cardId"><br>
+        <input type=" text" v-model='addFrom.pwd' placeholder="pwd"><br>
+        <input type=" text" v-model='addFrom.money' placeholder="money"><br>
+        <button @click='add'>添加</button>
+    </div>
+    <script src="../js/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                search: '',
+                list: [
+                    { id: 1, cardId: "6225880287860549", pwd: "909090", money: 9000 },
+                    { id: 2, cardId: "6225880287862345", pwd: "666666", money: 100 },
+                    { id: 3, cardId: "6225880287861234", pwd: "888888", money: 5000 },
+                    { id: 4, cardId: "6225880287860549", pwd: "909090", money: 9000 },
+                    { id: 5, cardId: "6225880287862345", pwd: "666666", money: 100 },
+                    { id: 6, cardId: "6225880287861234", pwd: "888888", money: 5000 },
+                    { id: 7, cardId: "6225880287860549", pwd: "909090", money: 9000 },
+                    { id: 8, cardId: "6225880287862345", pwd: "666666", money: 100 },
+                    { id: 9, cardId: "6225880287861234", pwd: "888888", money: 5000 }
+                ],
+                addFrom: {
+                    id: '',
+                    cardId: '',
+                    pwd: '',
+                    money: ''
+                }
+            },
+            methods: {
+                del: function (id) {
+                    for (var i = 0; i < this.list.length; i++) {
+                        if (this.list[i].id == id) {
+                            this.list.splice(i, 1);
+                            break;
+                        }
+                    }
+                },
+                add: function () {
+                    var obj = { ...this.addFrom }
+                    this.list.push(obj)
+                    this.addFrom.id = '';
+                    this.addFrom.cardId = '';
+                    this.addFrom.pwd = '';
+                    this.addFrom.money = '';
+                },
+
+            },
+            //计算属性
+            computed: {
+                searchlist: function () {
+                    //filter过滤
+                    return this.list.filter((item) => {
+                        return item.cardId.indexOf(this.search) >= 0
+                    })
+                }
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
