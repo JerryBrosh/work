@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VueDay-01</title>
+    <style>
+        *{
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="stuList">
+        <input type="text" v-model="searchStu">
+        {{searchStu}}
+        <div>
+            <p v-for="item in getStu()">
+                {{item.id}}--{{item.cardId}}---{{item.money}}
+            </p>
+        </div>
+        <ul >
+            <li v-for="item in student" :key="item.id">
+                {{ item.id }}---{{ item.cardId}}---{{item.money}}
+                <button @click="delStudent(item.id)">删除</button>
+                <button @click="changeStudent(item.id)">修改</button>
+            </li>
+        </ul>
+        <div>
+            <input type="text" v-model="addStu.id">
+            <input type="text" v-model="addStu.cardId">
+            <input type="text" v-model="addStu.pwd">
+            <input type="text" v-model="addStu.money">
+            <button @click="addStudents">add</button>
+        </div>
+        <div>
+            <input type="text" v-model="changeStu.sid">
+            <input type="text" v-model="changeStu.scardId">
+            <input type="text" v-model="changeStu.spwd">
+            <input type="text" v-model="changeStu.smoney">
+            <button @click="">change</button>
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'#stuList',
+            data:{
+                searchStu:'',
+                changeStu:{
+                    sid:'',
+                    scardId:'',
+                    spwd:'',
+                    smoney:''
+                },
+                addStu:[{
+                    id:'',
+                    cardId:'',
+                    pwd:'',
+                    money:''
+                }],
+                student:[
+                {id:1,cardId:'123456789',pwd:'111111',money:2000},
+                {id:2,cardId:'123451234',pwd:'222222',money:4000},
+                {id:3,cardId:'123456951',pwd:'333333',money:6000},
+                {id:4,cardId:'123457536',pwd:'444444',money:2765},
+                {id:5,cardId:'123450025',pwd:'555555',money:2555},
+                {id:6,cardId:'123454569',pwd:'666666',money:1345},
+                {id:7,cardId:'123456789',pwd:'777777',money:1235}
+            ]
+            },
+            methods:{
+                getStu(){
+                    return this.student.filter((item)=>{
+                        return item.cardId.indexOf(this.searchStu)>=0;
+                    });
+                    // let arr=[];
+                    // for(var i =0;i<this.student.length;i++){
+                    //     if(this.student[i].cardId.indexOf(this.searchStu)>=0){
+                    //         arr.push(this.student[i]);
+                    //     }
+                    // }
+                    // return arr;
+                },
+                addStudents(){
+                    this.student.push(this.addStu);
+                },
+                delStudent(sid){
+                    for (let i=0;i<this.student.length;i++){
+                        if(this.student[i].id == sid){
+                            this.student.splice(i,1);
+                            break;
+                        }
+                    }
+                },
+                changeStudent(iid){
+                    this.changeStu=this.student.filter((it)=>{
+                        return it.id == iid;
+                    })
+                    Vue.set(this.changeStu);
+                    // this.changeStu=obj;
+                    // console.log( this.changeStu)
+                }
+            },
+            computed:{
+
+            }
+        });
+    </script>
+</body>
+</html>
