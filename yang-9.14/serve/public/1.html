@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <style>
+      .container {
+        margin-top: 50px;
+      }
+      #tb:empty::before {
+        content: '暂无数据';
+        font-size: 18px;
+        text-align: center;
+        font-weight: bold;
+      }
+    </style>
+</head>
+<body>   
+   <div class="container">
+     <div class="top">
+        <input id="searchName" class="form-control" type="text">
+        <button class="btn btn-primary" id="search">查询</button>
+        <select name="" id="selectClass">
+          <option value="-1">请选择</option>
+        </select>
+     </div>
+    <button class="btn btn-info" id="add">添加学生</button>
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkAll"></th>
+                <th>id</th>
+                <th>班级</th>
+                <th>姓名</th>
+                <th>地址</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="tb">
+              
+        </tbody>
+    </table>
+    <!-- 添加模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modelAdd">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">学生信息</h4>
+            </div>
+            <div class="modal-body" >
+                <form action="">
+                    <p>id：<input id="infoId" class="form-control" placeholder="id" type="text" required></p>
+                    <p>idCard：<input id="infoIdCard" class="form-control" placeholder="idCard" type="text" required></p>
+                    <p>pwd：<input id="pwd" class="form-control" type="text" placeholder="pwd" required></p>
+                    <p>金额：<input id="money" class="form-control" type="text" placeholder="金额" required></p>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary" id="addStudent">添加</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+     <!-- 修改模态框 -->
+     <div class="modal fade" tabindex="-1" role="dialog" id="modelInfo">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">学生信息</h4>
+            </div>
+            <div class="modal-body" >
+                <form action="">
+                    <p>id：<input id="idInfo" class="form-control"  type="text" ></p>
+                    <p>idCard：<input id="idCardInfo" class="form-control"  type="text" ></p>
+                    <p>pwd：<input id="pwdInfo" class="form-control" type="text"  ></p>
+                    <p>金额：<input id="moneyInfo" class="form-control" type="text" ></p>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary" id="xiugaiStudent">修改</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    <div id="fenye"></div>
+   </div>
+    <script src="js/jquery-3.5.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/1.js"></script>
+    <script src="js/myAjax.js"></script>
+    <script>
+      //点击查询
+      $('#search').click(()=>{
+        let stuName = $('#searchName').val()
+        let classid = $('#selectClass').val()
+        var xhr;
+        if(XMLHttpRequest) {
+            xhr = new XMLHttpRequest()
+        }else{
+            xhr = new ActiveXObject('Microsoft.XMLHttp')
+        }
+        xhr.open('get','/search?stuname='+stuName+'&classid='+classid+'&cur='+curentpage+'&tpage='+persize,true)
+        xhr.onreadystatechange=function() {
+            if(xhr.readyState==4&&xhr.status==200) {
+               let data = JSON.parse(xhr.responseText)
+               if(data.code==200) {
+                 user=data.data
+                  fenye();
+                  showTabel();
+               }else {
+                 alert(data.msg)
+               }
+            }
+        }
+        xhr.send()
+      })
+      $(function(){
+        getClassList()
+      })
+      //渲染下拉菜单
+      function getClassList(){
+        MYajax('get','/getClass','',(data)=>{
+          let cls = JSON.parse(data)
+          if(cls.code==200){
+            cls.data.forEach((item,index)=>{
+              $('#selectClass').append(`<option value="${index}">${item.className}</option>`)
+            })
+          }else{
+            alert(cls.msg)
+          }
+        })
+      }
+  
+     
+    </script>
+</body>
+</html>
